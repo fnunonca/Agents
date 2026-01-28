@@ -4,49 +4,46 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This repository contains AI agent prompt templates for .NET development workflows. These prompts define specialized agents that can be used by LLMs to perform automated code review, performance benchmarking, and git history investigation.
+This repository contains AI agent prompt templates (written in Spanish) for .NET 8 / C# 12 development workflows. These prompts define specialized agents for LLMs to perform automated code review, performance benchmarking, and git history investigation.
 
 ## Agent Prompts
 
-### 1. .NET Code Review Agent (`dotnet-code-review-agent-prompt.md`)
-Main orchestrator agent for comprehensive code reviews of .NET 8 applications. Covers:
-- Security analysis (SQL injection, input validation, auth, secrets)
-- Performance review (N+1 queries, async patterns, LINQ usage)
-- Architecture and SOLID principles
-- Testing quality
-- C# 12 / .NET 8 best practices
+### Code Review Agent (`dotnet-code-review-agent-prompt.md`)
+Main orchestrator for comprehensive .NET 8 code reviews. Analyzes security (SQL injection, auth, secrets), performance (N+1 queries, async patterns), architecture (SOLID), and testing quality.
 
-Key outputs: `CODE_REVIEW_[CommitSHA]_[Date].md` reports
+**Outputs**: `CODE_REVIEW_[CommitSHA]_[Date].md`
 
-### 2. Benchmark Analyzer Sub-Agent (`benchmark-analyzer-subagent-prompt.md`)
-Specialized agent for creating and running BenchmarkDotNet performance tests. Features:
-- Automated benchmark project setup
-- Multiple optimization variant generation
-- Performance comparison with baseline
-- Detailed reports with recommendations
+### Benchmark Analyzer (`benchmark-analyzer-subagent-prompt.md`)
+Sub-agent for BenchmarkDotNet performance testing. Creates benchmark projects, generates 2-4 optimization variants, and produces detailed comparison reports.
 
-Key outputs: `BENCHMARK_REPORT.md` in `benchmark/` directory
+**Outputs**: `BENCHMARK_REPORT.md` in `benchmark/Benchmark_[MethodName]_[Timestamp]/`
 
-### 3. Git History Investigator (`git-history-investigator-agent-prompt.md`)
-Agent for code archaeology and historical analysis:
-- Bug introduction finding (git bisect)
-- Blame analysis for code lines
-- Code evolution tracking
-- Deleted code recovery
-- Impact analysis
+### Git History Investigator (`git-history-investigator-agent-prompt.md`)
+Agent for code archaeology: bug introduction finding (git bisect), blame analysis, code evolution tracking, deleted code recovery, and impact analysis.
 
-## Working with These Prompts
+**Investigation types**: `bug_finder`, `blame_analysis`, `code_evolution`, `deleted_code`, `author_analysis`, `impact_analysis`, `related_commits`
 
-These are system prompts written in Spanish, designed for .NET 8 / C# 12 codebases. When modifying:
+## Prompt Structure
 
-- Maintain the YAML parameter specification format
-- Keep the detailed example outputs and templates
-- Preserve the checklist structures for review dimensions
-- Update version info when making significant changes
+All agents use a consistent YAML parameter specification format:
 
-## Integration Points
+```yaml
+# Required parameters
+parameter_name: type           # Description
 
-The agents are designed to work together:
-- Code Review Agent can invoke Benchmark Analyzer for performance-critical methods
-- Git Investigator provides historical context for code review findings
-- Configuration via `.code-review-config.yml` and `.git-investigator-config.yml`
+# Optional parameters
+optional_param: type [opcional] # Description with default
+```
+
+When modifying prompts:
+- Maintain the YAML parameter format in the "Parámetros de Entrada" section
+- Preserve the markdown report templates with their emoji conventions
+- Keep the checklist structures (using `- [ ]` format)
+- Update version info at the bottom when making significant changes
+
+## Agent Integration
+
+The agents work as a system:
+- **Code Review → Benchmark**: Code Review invokes Benchmark Analyzer when detecting performance-critical methods (configurable via `benchmark_threshold`)
+- **Code Review → Git Investigator**: Provides historical context for review findings
+- **Configuration files**: `.code-review-config.yml`, `.git-investigator-config.yml`

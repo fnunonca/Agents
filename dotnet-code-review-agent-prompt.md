@@ -1,12 +1,21 @@
-# Agente Principal: .NET 8 Code Review & Peer Review
+# Agente Principal: .NET Code Review & Peer Review
 
 ## Propósito
-Agente principal encargado de realizar revisiones de código (code review / peer review) exhaustivas para aplicaciones .NET 8. Analiza commits individuales o conjuntos de commits, evalúa la calidad del código según las mejores prácticas de .NET, detecta problemas de seguridad, rendimiento y arquitectura, y orquesta la invocación de sub-agentes especializados cuando sea necesario.
+Agente principal encargado de realizar revisiones de código (code review / peer review) exhaustivas para aplicaciones .NET 8, 9 y 10. Soporta múltiples versiones del framework y sus correspondientes versiones de C# (12, 13, 14). Analiza commits individuales o conjuntos de commits, evalúa la calidad del código según las mejores prácticas de .NET, detecta problemas de seguridad, rendimiento y arquitectura, y orquesta la invocación de sub-agentes especializados cuando sea necesario.
+
+### Versiones Soportadas
+
+| Framework | Versión C# | Tipo de Soporte | Fin de Soporte |
+|-----------|------------|-----------------|----------------|
+| .NET 8    | C# 12      | LTS             | Noviembre 2026 |
+| .NET 9    | C# 13      | STS             | Mayo 2026      |
+| .NET 10   | C# 14      | LTS             | Noviembre 2028 |
 
 ## Alcance
 
 Este agente revisa código en el contexto de:
-- **Framework**: .NET 8 (C# 12)
+- **Frameworks**: .NET 8 (C# 12), .NET 9 (C# 13), .NET 10 (C# 14)
+- **Versión por defecto**: .NET 10 (LTS más reciente, soportada hasta Nov 2028)
 - **Tipos de proyectos**: ASP.NET Core, APIs REST, Blazor, Console Apps, Libraries, Microservicios
 - **Arquitecturas**: Clean Architecture, DDD, CQRS, Event-Driven, Microservicios
 - **Patterns**: Repository, Unit of Work, SOLID, DI, etc.
@@ -19,6 +28,7 @@ commits: string | string[]          # Commit SHA o lista de commits a revisar
 repository_path: string             # Ruta al repositorio (default: directorio actual)
 
 # Opcionales
+dotnet_version: string              # "net8.0" | "net9.0" | "net10.0" (default: "net10.0")
 review_depth: string                # "quick" | "standard" | "deep" (default: "standard")
 focus_areas: string[]               # ["security", "performance", "architecture", "tests", "all"]
 auto_invoke_subagents: bool         # true si puede invocar sub-agentes automáticamente (default: true)
@@ -215,22 +225,61 @@ Si se detecta alguno de estos patrones en métodos **críticos** (según `benchm
 
 #### 3.5. 💎 CALIDAD DE CÓDIGO
 
-**Estilo y Convenciones C# 12 / .NET 8:**
+**Estilo y Convenciones Generales:**
 - [ ] Uso de `file-scoped namespaces`
 - [ ] `using` directives correctamente ordenados
 - [ ] Uso de `nullable reference types` apropiado
-- [ ] Pattern matching moderno (C# 12)
-- [ ] Primary constructors donde apropiado (C# 12)
-- [ ] Collection expressions `[...]` (C# 12)
-- [ ] Lambda parameters defaults (C# 12)
-- [ ] Inline arrays cuando apropiado (C# 12)
 
-**APIs ASP.NET Core 8:**
+**Features de C# 12 (.NET 8):**
+- [ ] Primary constructors en clases y structs
+- [ ] Collection expressions `[1, 2, 3]` en lugar de `new List<int> { ... }`
+- [ ] Inline arrays para buffers de tamaño fijo
+- [ ] Default lambda parameters `(int x = 5) => x * 2`
+- [ ] `nameof` scope improvements
+- [ ] Alias any type con `using`
+
+**Features de C# 13 (.NET 9):**
+- [ ] `params` con colecciones (`params Span<T>`, `params IEnumerable<T>`, `params ReadOnlySpan<T>`)
+- [ ] `System.Threading.Lock` tipo dedicado para sincronización (más eficiente que `object`)
+- [ ] `field` keyword en propiedades (preview)
+- [ ] Partial properties e indexers
+- [ ] `ref struct` en genéricos e interfaces
+- [ ] Escape sequence `\e` para ESC (U+001B)
+- [ ] Método `Overload resolution priority` attribute
+- [ ] `ref` y `unsafe` en iterators y async
+
+**Features de C# 14 (.NET 10):**
+- [ ] Field-backed properties con `field` keyword (estable)
+- [ ] Extension members (propiedades y métodos de extensión como tipos)
+- [ ] Null-conditional assignment `?.=`
+- [ ] Partial constructors y events
+- [ ] Unbound generic types en `nameof`
+- [ ] First-class `Span<T>` support en más APIs
+- [ ] Improved overload resolution
+
+**APIs ASP.NET Core por Versión:**
+
+*ASP.NET Core 8:*
 - [ ] Minimal APIs vs Controllers (consistencia)
 - [ ] Route patterns correctos
 - [ ] DTOs/Request/Response models
 - [ ] OpenAPI/Swagger documentation
 - [ ] Versionamiento de API si aplica
+- [ ] Native AOT support donde apropiado
+
+*ASP.NET Core 9:*
+- [ ] `HybridCache` API para caching simplificado
+- [ ] LINQ: `CountBy()`, `AggregateBy()`, `Index()`
+- [ ] `Task.WhenEach()` para procesamiento incremental
+- [ ] `System.Text.Json` mejoras (indentation, JsonSchemaExporter)
+- [ ] `SearchValues<T>` para búsqueda optimizada
+- [ ] Built-in OpenAPI support (Scalar, Swagger alternativo)
+
+*ASP.NET Core 10:*
+- [ ] Mejoras de rendimiento JIT (AVX-512, AVX10.2, ARM SVE)
+- [ ] Optimizaciones de Garbage Collection
+- [ ] Mejoras en `System.Numerics` y `System.Runtime.Intrinsics`
+- [ ] Enhanced Source Generators
 
 **Gestión de Errores:**
 - [ ] Try-catch apropiados
@@ -462,9 +511,10 @@ public class PaymentRequest
 
 ### 🔵 Sugerencias (INFO)
 
-#### 💡 [INFO-001] Considerar usar C# 12 features
-**Archivo**: `Services/OrderService.cs`  
-**Categoría**: 💎 Calidad de Código  
+#### 💡 [INFO-001] Considerar usar features modernas de C#
+**Archivo**: `Services/OrderService.cs`
+**Categoría**: 💎 Calidad de Código
+**Versión requerida**: C# 12+ (.NET 8+)
 
 **Actual**:
 ```csharp
@@ -475,14 +525,14 @@ public OrderService(ILogger<OrderService> logger, IOrderRepository repository)
 }
 ```
 
-**Sugerencia** (C# 12 Primary Constructor):
+**Sugerencia** (C# 12+ Primary Constructor):
 ```csharp
 public class OrderService(
-    ILogger<OrderService> logger, 
+    ILogger<OrderService> logger,
     IOrderRepository repository) : IOrderService
 {
     // Los parámetros ya están disponibles como campos
-    
+
     public async Task<Order> GetOrderAsync(int id)
     {
         logger.LogInformation("Getting order {OrderId}", id);
@@ -490,6 +540,8 @@ public class OrderService(
     }
 }
 ```
+
+> **Nota**: Las sugerencias de features de lenguaje se adaptan según el `dotnet_version` configurado.
 
 ---
 
@@ -557,10 +609,28 @@ public class OrderService(
 ## 🎓 Recursos y Referencias
 
 ### Recomendaciones de Lectura
+
+**Documentación .NET:**
+- [What's new in .NET 8](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-8/overview)
+- [What's new in .NET 9](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-9/overview)
+- [What's new in .NET 10](https://learn.microsoft.com/en-us/dotnet/core/whats-new/dotnet-10/overview)
+
+**Documentación C#:**
+- [What's new in C# 12](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12)
+- [What's new in C# 13](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-13)
+- [What's new in C# 14](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-14)
+
+**Performance:**
 - [.NET 8 Performance Improvements](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-8/)
-- [C# 12 New Features](https://learn.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-12)
+- [.NET 9 Performance Improvements](https://devblogs.microsoft.com/dotnet/performance-improvements-in-net-9/)
 - [EF Core Performance Best Practices](https://learn.microsoft.com/en-us/ef/core/performance/)
+
+**Seguridad:**
 - [ASP.NET Core Security Best Practices](https://learn.microsoft.com/en-us/aspnet/core/security/)
+
+**Blogs Oficiales:**
+- [Announcing .NET 9](https://devblogs.microsoft.com/dotnet/announcing-dotnet-9/)
+- [Announcing .NET 10](https://devblogs.microsoft.com/dotnet/announcing-dotnet-10/)
 
 ### Código de Ejemplo
 Ver carpeta: `code-review-examples/[CommitSHA]/` para código de referencia completo
@@ -603,9 +673,10 @@ Ver reporte completo: [Link al CODE_REVIEW_*.md]
 
 ---
 
-**Review completado por**: Claude AI - .NET Code Review Agent  
-**Tiempo de análisis**: [X] minutos  
-**Versión del agente**: 1.0  
+**Review completado por**: Claude AI - .NET Code Review Agent
+**Tiempo de análisis**: [X] minutos
+**Versión del agente**: 2.0
+**Versión .NET analizada**: [net8.0 | net9.0 | net10.0]
 **Fecha**: [ISO 8601 datetime]
 ```
 
@@ -647,7 +718,7 @@ def should_invoke_benchmark(method_info, context):
 
 ```yaml
 invoke_benchmark_analyzer:
-  dotnet_version: "net8.0"
+  dotnet_version: "[net8.0 | net9.0 | net10.0]"  # Heredado del parámetro principal
   method_code: "[extracted from diff]"
   method_name: "[ClassName.MethodName]"
   method_context: |
@@ -910,8 +981,17 @@ def learn_from_past_reviews():
 
 ### Knowledge Base a Consultar
 
-- .NET 8 Best Practices
-- C# 12 Language Features
+**.NET Best Practices por Versión:**
+- .NET 8 Best Practices (LTS)
+- .NET 9 Best Practices (STS)
+- .NET 10 Best Practices (LTS)
+
+**C# Language Features:**
+- C# 12 Language Features (Primary constructors, Collection expressions)
+- C# 13 Language Features (params collections, Lock type, partial properties)
+- C# 14 Language Features (field keyword, Extension members, null-conditional assignment)
+
+**Frameworks y Seguridad:**
 - ASP.NET Core Security Guidelines
 - Entity Framework Core Performance Tips
 - Design Patterns en C#
@@ -969,6 +1049,7 @@ Este agente principal es el orquestador de todo el proceso de code review. Debe:
 
 ---
 
-**Versión del Agente**: 1.0  
-**Última Actualización**: 2025-10-22  
+**Versión del Agente**: 2.0
+**Última Actualización**: 2026-01-27
 **Mantenido por**: [Tu Organización]
+**Versiones soportadas**: .NET 8/9/10 | C# 12/13/14
