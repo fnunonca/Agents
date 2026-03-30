@@ -155,3 +155,54 @@ El reporte generado incluye comandos preparados para invocar el sub-agente `benc
 - `method_name`: Nombre del método
 - `method_context`: Contexto inferido del análisis (hot path, frecuencia estimada)
 - `focus_area`: "both" (memoria y velocidad)
+
+---
+
+## Orquestación Automatizada
+
+Para un flujo de trabajo completo (escaneo → selección → benchmark), usar el script de orquestación:
+
+### Modo Interactivo
+
+```bash
+python3 .claude/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py /path/to/Solution.sln
+```
+
+### Modo Batch (CI/CD)
+
+```bash
+python3 .claude/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py /path/to/Solution.sln \
+    --batch \
+    --threshold critical
+```
+
+### Flags Disponibles
+
+| Flag | Descripción |
+|------|-------------|
+| `--batch` | Ejecuta sin interacción |
+| `--threshold` | Umbral para escaneo: `critical`, `high`, `medium`, `low` |
+| `--select-threshold` | Umbral para auto-selección en batch |
+| `--output-dir` | Directorio de salida |
+| `--quiet`, `-q` | Modo silencioso |
+
+### Output del Orquestador
+
+```
+proyecto/
+├── benchmark_params/                         # YAMLs para benchmark-analyzer
+│   ├── OrderService_ProcessBulkOrders.yaml
+│   └── ReportGenerator_BuildReport.yaml
+└── BENCHMARK_ORCHESTRATION_20260127.md       # Reporte consolidado
+```
+
+### Invocación del Benchmark-Analyzer
+
+Después de generar los YAMLs:
+
+```
+"Ejecuta el benchmark-analyzer con los parámetros del archivo:
+ benchmark_params/[nombre_metodo].yaml"
+```
+
+Ver `references/orchestration_guide.md` para documentación completa del flujo de trabajo.
