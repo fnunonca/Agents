@@ -1,3 +1,10 @@
+---
+name: benchmark-analyzer
+description: "Use this agent when the code review agent or the user identifies performance-critical methods in .NET 8/C# 12 code that need benchmarking, when you need to create BenchmarkDotNet projects to compare optimization variants, or when performance regression analysis is required. This agent is typically invoked as a sub-agent from the code review process but can also be used standalone.\n\nExamples:\n\n- Example 1:\n  user: \"The code review found that the method `ProcessOrders` has potential N+1 query issues and needs performance benchmarking\"\n  assistant: \"I'll use the benchmark-analyzer agent to create a BenchmarkDotNet project, generate optimization variants, and produce a detailed performance comparison report for `ProcessOrders`.\"\n\n- Example 2:\n  user: \"Analiza el rendimiento del método SerializePayload comparando System.Text.Json vs Newtonsoft.Json\"\n  assistant: \"Voy a usar el agente de benchmark para crear un proyecto BenchmarkDotNet que compare ambas implementaciones de serialización.\"\n\n- Example 3:\n  Context: The code review agent has completed its analysis and flagged a method with `benchmark_threshold` exceeded.\n  assistant: \"The code review identified `CalculateDiscount` as performance-critical. I'll now launch the benchmark analyzer to generate optimization variants and run BenchmarkDotNet comparisons.\""
+model: sonnet
+color: green
+---
+
 # Sub-Agente: .NET Benchmark Analyzer
 
 ## Propósito

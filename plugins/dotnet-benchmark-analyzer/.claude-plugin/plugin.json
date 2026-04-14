@@ -1,0 +1,9 @@
+{
+  "name": "dotnet-benchmark-analyzer",
+  "version": "0.1.0",
+  "description": "Sub-agente de BenchmarkDotNet. Crea proyectos de benchmark, genera 2-4 variantes de optimización (Span, ArrayPool, ValueTask, SIMD) y produce reportes comparativos.",
+  "author": "Fernando",
+  "license": "MIT",
+  "keywords": ["dotnet", "benchmarkdotnet", "performance", "optimization"],
+  "agents": "./agents"
+}

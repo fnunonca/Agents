@@ -1,3 +1,10 @@
+---
+name: code-reviewer
+description: "Use this agent when you need a comprehensive code review of .NET 8/9/10 (C# 12/13/14) code covering security (SQL injection, secrets, auth flaws), performance (N+1 queries, async patterns, allocations), architecture (SOLID principles), and test quality. Invoke after a feature branch is ready for review, after refactoring critical paths, or when preparing a PR. Outputs a CODE_REVIEW_[CommitSHA]_[Date].md report. Can delegate to dotnet-benchmark-analyzer when performance-critical methods are detected, and to git-history-investigator for historical context."
+model: opus
+color: blue
+---
+
 # Agente Principal: .NET Code Review & Peer Review
 
 ## Propósito

@@ -8,17 +8,27 @@ Guía rápida para usar las herramientas de análisis de performance en proyecto
 - .NET SDK 8.0+ (para ejecutar benchmarks)
 - Claude Code (VS Code extension o CLI)
 
-## Estructura del Repositorio
+## Opción A — Instalar como plugin (recomendado)
+
+```
+/plugin marketplace add github.com/<tu-usuario>/Agents
+/plugin install dotnet-benchmark-scanner@fernando-agents
+/plugin install dotnet-benchmark-analyzer@fernando-agents
+```
+
+Una vez instalados, podés invocar la skill y el agente directamente desde Claude Code sin clonar este repo.
+
+## Opción B — Ejecutar scripts directamente
+
+Desde este repo (o un clon):
 
 ```
 Agents/
-├── .claude/skills/dotnet-benchmark-scanner/   # Skill de escaneo
-│   ├── scripts/
-│   │   ├── scan_solution.py                   # Scanner de candidatos
-│   │   └── orchestrate_benchmark.py           # Orquestador completo
-│   └── SKILL.md                               # Documentación de la skill
-├── benchmark-analyzer-subagent-prompt.md      # Sub-agente de benchmarking
-└── QUICKSTART.md                              # Esta guía
+└── plugins/dotnet-benchmark-scanner/skills/dotnet-benchmark-scanner/
+    ├── scripts/
+    │   ├── scan_solution.py           # Scanner de candidatos
+    │   └── orchestrate_benchmark.py   # Orquestador completo
+    └── SKILL.md
 ```
 
 ## Uso Rápido (3 Pasos)
@@ -28,7 +38,7 @@ Agents/
 Desde este directorio (Agents), ejecuta:
 
 ```bash
-python3 .claude/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py \
+python3 plugins/dotnet-benchmark-scanner/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py \
   /ruta/a/tu/MiProyecto.sln
 ```
 
@@ -47,7 +57,7 @@ El orquestador mostrará una tabla interactiva:
 
 ### Paso 3: Ejecutar Benchmark
 
-Con los YAMLs generados, pide a Claude:
+Con los YAMLs generados, pedí a Claude:
 
 ```
 "Ejecuta benchmark-analyzer con benchmark_params/OrderService_ProcessOrders.yaml"
@@ -57,14 +67,14 @@ Con los YAMLs generados, pide a Claude:
 
 ### Scanner Solo (sin orquestación)
 ```bash
-python3 .claude/skills/dotnet-benchmark-scanner/scripts/scan_solution.py \
+python3 plugins/dotnet-benchmark-scanner/skills/dotnet-benchmark-scanner/scripts/scan_solution.py \
   /ruta/a/MiProyecto.sln \
   --threshold medium
 ```
 
 ### Orquestador Modo Batch (CI/CD)
 ```bash
-python3 .claude/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py \
+python3 plugins/dotnet-benchmark-scanner/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py \
   /ruta/a/MiProyecto.sln \
   --batch \
   --threshold critical
@@ -81,21 +91,10 @@ Después de ejecutar el orquestador:
 └── BENCHMARK_ORCHESTRATION_*.md         # Reporte consolidado
 ```
 
-## Copiar Herramientas a tu Proyecto (Opcional)
-
-Si prefieres tener las herramientas en tu propio proyecto:
-
-```bash
-cd /ruta/a/tu/proyecto
-mkdir -p .claude/skills
-cp -r /home/liamred/Escritorio/Agents/.claude/skills/dotnet-benchmark-scanner .claude/skills/
-cp /home/liamred/Escritorio/Agents/benchmark-analyzer-subagent-prompt.md .
-```
-
 ## FAQ
 
 **¿Necesito hacer `init` o instalar algo?**
-No. Son scripts Python que se ejecutan directamente.
+Si instalaste los plugins vía `/plugin install`, no. Si ejecutás los scripts directamente, solo necesitás Python 3.8+.
 
 **¿Dónde se crean los benchmarks?**
 En `./benchmark/` del directorio donde ejecutes el orquestador.

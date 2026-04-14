@@ -1,3 +1,10 @@
+---
+name: git-investigator
+description: "Use this agent for code archaeology tasks: finding when a bug was introduced (git bisect), blame analysis on a specific line or function, tracking how a piece of code evolved over time, recovering deleted code, identifying related commits, analyzing impact of a change across history, or attributing changes to authors. Supports investigation types: bug_finder, blame_analysis, code_evolution, deleted_code, author_analysis, impact_analysis, related_commits."
+model: sonnet
+color: yellow
+---
+
 # Agente: Git History Investigator & Code Archaeology
 
 ## Propósito

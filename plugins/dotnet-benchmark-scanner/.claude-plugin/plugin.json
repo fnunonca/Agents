@@ -1,0 +1,9 @@
+{
+  "name": "dotnet-benchmark-scanner",
+  "version": "0.1.0",
+  "description": "Escanea soluciones .NET completas para identificar métodos candidatos a benchmark. Detecta LINQ excesivo, concatenación de strings en loops, boxing y allocaciones innecesarias.",
+  "author": "Fernando",
+  "license": "MIT",
+  "keywords": ["dotnet", "scanner", "performance", "code-smell"],
+  "skills": "./skills"
+}

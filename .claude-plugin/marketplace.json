@@ -1,0 +1,41 @@
+{
+  "name": "fernando-agents",
+  "owner": {
+    "name": "Fernando"
+  },
+  "description": "Marketplace personal de agentes y skills de Claude Code para desarrollo .NET, performance y git archaeology.",
+  "plugins": [
+    {
+      "name": "dotnet-code-review",
+      "source": "./plugins/dotnet-code-review",
+      "description": "Revisión integral de código .NET 8/9/10: seguridad (SQL injection, secrets, auth), performance (N+1, async), arquitectura SOLID y calidad de tests.",
+      "version": "0.1.0",
+      "category": "code-quality",
+      "keywords": ["dotnet", "csharp", "code-review", "security", "solid"]
+    },
+    {
+      "name": "dotnet-benchmark-analyzer",
+      "source": "./plugins/dotnet-benchmark-analyzer",
+      "description": "Sub-agente de BenchmarkDotNet. Crea proyectos de benchmark, genera 2-4 variantes de optimización (Span, ArrayPool, ValueTask, SIMD) y produce reportes comparativos.",
+      "version": "0.1.0",
+      "category": "performance",
+      "keywords": ["dotnet", "benchmarkdotnet", "performance", "optimization"]
+    },
+    {
+      "name": "git-history-investigator",
+      "source": "./plugins/git-history-investigator",
+      "description": "Arqueología de código: bisect de bugs, blame analysis, evolución de código, recuperación de código eliminado, análisis de impacto y commits relacionados.",
+      "version": "0.1.0",
+      "category": "git",
+      "keywords": ["git", "bisect", "blame", "history", "archaeology"]
+    },
+    {
+      "name": "dotnet-benchmark-scanner",
+      "source": "./plugins/dotnet-benchmark-scanner",
+      "description": "Escanea soluciones .NET completas para identificar métodos candidatos a benchmark. Detecta LINQ excesivo, concatenación de strings en loops, boxing y allocaciones innecesarias.",
+      "version": "0.1.0",
+      "category": "performance",
+      "keywords": ["dotnet", "scanner", "performance", "code-smell"]
+    }
+  ]
+}

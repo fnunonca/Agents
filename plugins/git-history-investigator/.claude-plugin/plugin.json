@@ -1,0 +1,9 @@
+{
+  "name": "git-history-investigator",
+  "version": "0.1.0",
+  "description": "Arqueología de código: bisect de bugs, blame analysis, evolución de código, recuperación de código eliminado, análisis de impacto y commits relacionados.",
+  "author": "Fernando",
+  "license": "MIT",
+  "keywords": ["git", "bisect", "blame", "history", "archaeology"],
+  "agents": "./agents"
+}
