@@ -10,6 +10,10 @@ import os
 import re
 import subprocess
 
+# Force UTF-8 on Windows so emojis in the statusline don't crash cp1252 stdout.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 
 def get_git_status():
     """Get git branch and change count for statusline."""

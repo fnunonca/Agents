@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-`code-craft` — a **Claude Code plugin marketplace** that distributes a personal collection of agents and skills for .NET 8/9/10 (C# 12/13/14) development workflows: automated code review, backend implementation on internal stack, performance benchmarking, git history investigation, benchmark scanning, and architecture documentation. All agent prompts and output are in Spanish.
+`code-craft` — a **Claude Code plugin marketplace** that distributes a personal collection of agents and skills for .NET 8/9/10 (C# 12/13/14) development workflows: automated code review, backend implementation on internal stack, performance benchmarking, git history investigation, benchmark scanning, and architecture documentation.
+
+This repo contains no application code — only plugin manifests, agent prompts, skill definitions, and a few Python scripts. There is no build, lint, or test step for the marketplace itself. Validation is done by JSON parsing the manifests and by installing the marketplace locally in Claude Code.
 
 Users consume this repo via:
 ```
@@ -36,20 +38,32 @@ Each plugin follows the standard Claude Code layout:
 - `plugins/<name>/agents/*.md` — agent prompts with YAML frontmatter (for agent plugins)
 - `plugins/<name>/skills/<name>/SKILL.md` — skill definition (for skill plugins)
 
-## Key Commands (running scripts directly from this repo)
+## Key Commands
 
-### Scan a .NET solution for performance candidates
+### Validate marketplace + plugin manifests
+There is no test suite. The only mechanical check is JSON validity:
 ```bash
+python3 -c "import json; json.load(open('.claude-plugin/marketplace.json'))"
+python3 -c "import json; json.load(open('plugins/<name>/.claude-plugin/plugin.json'))"
+```
+
+### Test the marketplace locally before publishing
+Inside a Claude Code session (use an absolute path to this repo):
+```
+/plugin marketplace add C:/IZIPAY/code-craft
+/plugin install <plugin-name>@code-craft
+```
+This is the canonical way to verify a new or modified plugin without pushing to GitHub.
+
+### Run the benchmark scanner scripts directly
+```bash
+# Full orchestration (interactive)
 python3 plugins/dotnet-benchmark-scanner/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py /path/to/Solution.sln
-```
 
-### Scanner only (no orchestration)
-```bash
+# Scanner only
 python3 plugins/dotnet-benchmark-scanner/skills/dotnet-benchmark-scanner/scripts/scan_solution.py /path/to/Solution.sln --threshold medium
-```
 
-### Batch mode (CI/CD)
-```bash
+# Batch mode (CI/CD)
 python3 plugins/dotnet-benchmark-scanner/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py /path/to/Solution.sln --batch --threshold critical
 ```
 
@@ -91,11 +105,21 @@ optional_param: type [opcional] # Description with default
 ```
 
 When modifying prompts:
-- Keep YAML frontmatter at the top of every agent `.md` file (`name`, `description`, `model`, `color`)
+- Keep YAML frontmatter at the top of every agent `.md` file (`name`, `description`, `model`, `color`); skills require `name`, `description`
 - Maintain the YAML parameter format in the "Parámetros de Entrada" section
 - Preserve the markdown report templates with their emoji conventions
 - Keep the checklist structures (using `- [ ]` format)
-- All documentation and agent output is in Spanish
+- **Language convention**: agent prompts and user-visible output are in Spanish; file names, JSON keys, and inline technical comments stay in English
+
+## Where generated artifacts land
+
+Agents write into the **consumer's** project directory, not into this repo:
+- `dotnet-code-review` → `CODE_REVIEW_[CommitSHA]_[Date].md` at the project root
+- `dotnet-benchmark-analyzer` → `benchmark/Benchmark_[MethodName]_[Timestamp]/BENCHMARK_REPORT.md`
+- `dotnet-benchmark-scanner` (orchestrator) → `benchmark_params/*.yaml` + `BENCHMARK_ORCHESTRATION_*.md`
+- `architecture-html` → `docs/architecture.html`
+
+Do not commit example outputs into this marketplace repo.
 
 ## Agent Integration
 
