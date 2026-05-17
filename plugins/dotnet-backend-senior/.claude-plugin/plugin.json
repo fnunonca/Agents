@@ -2,7 +2,10 @@
   "name": "dotnet-backend-senior",
   "version": "0.1.0",
   "description": "Desarrollador backend senior .NET 10 / C# 14 para APIs sobre stack interno (Clean Architecture 6 capas, Dapper + Stored Procedures, NLog/IAppLogger, Hangfire, IRestClient, Options Pattern).",
-  "author": "Fernando",
+  "author": {
+    "name": "Fernando",
+    "email": "fnunonca@gmail.com"
+  },
   "license": "MIT",
   "keywords": ["dotnet", "csharp", "backend", "clean-architecture", "dapper"],
   "agents": "./agents"

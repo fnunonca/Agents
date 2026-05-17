@@ -2,7 +2,10 @@
   "name": "dotnet-code-review",
   "version": "0.1.0",
   "description": "Revisión integral de código .NET 8/9/10: seguridad (SQL injection, secrets, auth), performance (N+1, async), arquitectura SOLID y calidad de tests.",
-  "author": "Fernando",
+  "author": {
+    "name": "Fernando",
+    "email": "fnunonca@gmail.com"
+  },
   "license": "MIT",
   "keywords": ["dotnet", "csharp", "code-review", "security", "solid"],
   "agents": "./agents"
