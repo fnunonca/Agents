@@ -12,8 +12,8 @@ Guía rápida para usar las herramientas de análisis de performance en proyecto
 
 ```
 /plugin marketplace add github.com/<tu-usuario>/Agents
-/plugin install dotnet-benchmark-scanner@fernando-agents
-/plugin install dotnet-benchmark-analyzer@fernando-agents
+/plugin install dotnet-benchmark-scanner@code-craft
+/plugin install dotnet-benchmark-analyzer@code-craft
 ```
 
 Una vez instalados, podés invocar la skill y el agente directamente desde Claude Code sin clonar este repo.

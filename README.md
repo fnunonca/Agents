@@ -1,4 +1,4 @@
-# fernando-agents
+# code-craft
 
 Marketplace personal de agentes y skills para [Claude Code](https://claude.ai/code). Enfocado en flujos de desarrollo .NET 8/9/10, performance y git archaeology.
 
@@ -8,7 +8,7 @@ En cualquier sesión de Claude Code:
 
 ```
 /plugin marketplace add github.com/<tu-usuario>/Agents
-/plugin install dotnet-code-review@fernando-agents
+/plugin install dotnet-code-review@code-craft
 ```
 
 Instalá solo los plugins que necesites — cada agente y skill se publica como plugin independiente.

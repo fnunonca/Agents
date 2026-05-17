@@ -4,12 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-`fernando-agents` — a **Claude Code plugin marketplace** that distributes a personal collection of agents and skills for .NET 8/9/10 (C# 12/13/14) development workflows: automated code review, backend implementation on internal stack, performance benchmarking, git history investigation, benchmark scanning, and architecture documentation. All agent prompts and output are in Spanish.
+`code-craft` — a **Claude Code plugin marketplace** that distributes a personal collection of agents and skills for .NET 8/9/10 (C# 12/13/14) development workflows: automated code review, backend implementation on internal stack, performance benchmarking, git history investigation, benchmark scanning, and architecture documentation. All agent prompts and output are in Spanish.
 
 Users consume this repo via:
 ```
 /plugin marketplace add github.com/<user>/Agents
-/plugin install <plugin-name>@fernando-agents
+/plugin install <plugin-name>@code-craft
 ```
 
 ## Prerequisites

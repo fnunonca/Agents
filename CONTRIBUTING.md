@@ -1,6 +1,6 @@
 # Contributing
 
-Guía para agregar un nuevo plugin (agente o skill) al marketplace `fernando-agents`.
+Guía para agregar un nuevo plugin (agente o skill) al marketplace `code-craft`.
 
 ## Estructura de un plugin
 
@@ -111,7 +111,7 @@ python3 -c "import json; json.load(open('plugins/mi-plugin/.claude-plugin/plugin
 # Probar instalación local
 # En Claude Code:
 #   /plugin marketplace add /ruta/absoluta/a/este/repo
-#   /plugin install mi-plugin@fernando-agents
+#   /plugin install mi-plugin@code-craft
 ```
 
 ### 5. Abrir un PR
