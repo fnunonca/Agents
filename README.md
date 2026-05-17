@@ -1,6 +1,6 @@
 # code-craft
 
-Marketplace personal de agentes y skills para [Claude Code](https://claude.ai/code). Enfocado en flujos de desarrollo .NET 8/9/10, performance y git archaeology.
+Marketplace personal de agentes y skills para [Claude Code](https://claude.ai/code). Enfocado en flujos de desarrollo .NET 8/9/10, performance, git archaeology y documentación de arquitectura.
 
 ## Instalación
 
@@ -29,6 +29,7 @@ Instalá solo los plugins que necesites — cada agente y skill se publica como 
 | Plugin | Descripción |
 |---|---|
 | **[dotnet-benchmark-scanner](plugins/dotnet-benchmark-scanner/)** | Escanea soluciones .NET completas para identificar métodos candidatos a benchmark. Detecta LINQ excesivo, concatenación de strings en loops, boxing y allocaciones innecesarias. |
+| **[architecture-html](plugins/architecture-html/)** | Genera `docs/architecture.html` — documentación técnica autocontenida con diagrama interactivo React Flow y secuencia UML Mermaid (zoom/pan, export PNG, fullscreen). Analiza el repo para identificar capas, endpoints, servicios externos y stored procedures. Sin bundler ni npm: abre con doble click. |
 
 ## Cómo funciona el sistema integrado
 
@@ -66,9 +67,12 @@ code-craft/
     ├── git-history-investigator/
     │   ├── .claude-plugin/plugin.json
     │   └── agents/git-investigator.md
-    └── dotnet-benchmark-scanner/
+    ├── dotnet-benchmark-scanner/
+    │   ├── .claude-plugin/plugin.json
+    │   └── skills/dotnet-benchmark-scanner/
+    └── architecture-html/
         ├── .claude-plugin/plugin.json
-        └── skills/dotnet-benchmark-scanner/
+        └── skills/architecture-html/SKILL.md
 ```
 
 ## Uso rápido del scanner (tras instalar `dotnet-benchmark-scanner`)
