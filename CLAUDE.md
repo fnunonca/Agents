@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-`fernando-agents` — a **Claude Code plugin marketplace** that distributes a personal collection of agents and skills for .NET 8/9/10 (C# 12/13/14) development workflows: automated code review, backend implementation on internal stack, performance benchmarking, git history investigation, and benchmark scanning. All agent prompts and output are in Spanish.
+`fernando-agents` — a **Claude Code plugin marketplace** that distributes a personal collection of agents and skills for .NET 8/9/10 (C# 12/13/14) development workflows: automated code review, backend implementation on internal stack, performance benchmarking, git history investigation, benchmark scanning, and architecture documentation. All agent prompts and output are in Spanish.
 
 Users consume this repo via:
 ```
@@ -21,13 +21,14 @@ Users consume this repo via:
 ## Repository Layout
 
 ```
-.claude-plugin/marketplace.json      # Marketplace catalog (5 plugins)
+.claude-plugin/marketplace.json      # Marketplace catalog (6 plugins)
 plugins/
 ├── dotnet-code-review/              # Agent plugin
 ├── dotnet-backend-senior/           # Agent plugin (implementer for internal stack)
 ├── dotnet-benchmark-analyzer/       # Agent plugin (sub-agent)
 ├── git-history-investigator/        # Agent plugin
-└── dotnet-benchmark-scanner/        # Skill plugin
+├── dotnet-benchmark-scanner/        # Skill plugin
+└── architecture-html/               # Skill plugin
 ```
 
 Each plugin follows the standard Claude Code layout:
@@ -75,6 +76,7 @@ Agent for code archaeology: bug introduction finding (git bisect), blame analysi
 ## Skill Plugins
 
 - **dotnet-benchmark-scanner** — Scans .NET solutions for performance code smells (LINQ abuse, string concat in loops, boxing, unnecessary allocations). Uses regex-based pattern detection with a scoring system and severity thresholds (Critical >= 15, High >= 10, Medium >= 6, Low >= 3).
+- **architecture-html** (`plugins/architecture-html/skills/architecture-html/SKILL.md`) — Generates a self-contained `docs/architecture.html` with an interactive React Flow architecture diagram and a Mermaid UML sequence diagram (zoom/pan, PNG export, fullscreen). Analyzes the repo (CLAUDE.md, csproj/sln/package.json, controllers, repositories, appsettings) to identify layers, endpoints, external services, and stored procedures. Loads React + React Flow + Mermaid from `esm.sh` via import map — no bundler/npm. Opens with a double click.
 
 ## Prompt Structure
 

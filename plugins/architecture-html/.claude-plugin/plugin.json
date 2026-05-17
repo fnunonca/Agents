@@ -1,0 +1,9 @@
+{
+  "name": "architecture-html",
+  "version": "0.1.0",
+  "description": "Genera docs/architecture.html — documentación técnica autocontenida con diagrama interactivo React Flow y secuencia UML Mermaid — analizando el código del repo (capas, endpoints, servicios externos, SPs).",
+  "author": "Fernando",
+  "license": "MIT",
+  "keywords": ["documentation", "architecture", "react-flow", "mermaid", "onboarding", "dotnet"],
+  "skills": "./skills"
+}

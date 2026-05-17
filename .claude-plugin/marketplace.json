@@ -44,6 +44,14 @@
       "version": "0.1.0",
       "category": "development",
       "keywords": ["dotnet", "csharp", "backend", "clean-architecture", "dapper"]
+    },
+    {
+      "name": "architecture-html",
+      "source": "./plugins/architecture-html",
+      "description": "Genera docs/architecture.html — documentación técnica autocontenida con diagrama interactivo React Flow y secuencia UML Mermaid — analizando el código del repo (capas, endpoints, servicios externos, SPs).",
+      "version": "0.1.0",
+      "category": "documentation",
+      "keywords": ["documentation", "architecture", "react-flow", "mermaid", "onboarding", "dotnet"]
     }
   ]
 }
