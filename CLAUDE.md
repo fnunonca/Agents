@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Users consume this repo via:
 ```
-/plugin marketplace add github.com/<user>/Agents
+/plugin marketplace add github.com/<user>/code-craft
 /plugin install <plugin-name>@code-craft
 ```
 

@@ -7,7 +7,7 @@ Marketplace personal de agentes y skills para [Claude Code](https://claude.ai/co
 En cualquier sesión de Claude Code:
 
 ```
-/plugin marketplace add github.com/<tu-usuario>/Agents
+/plugin marketplace add github.com/<tu-usuario>/code-craft
 /plugin install dotnet-code-review@code-craft
 ```
 
@@ -50,7 +50,7 @@ dotnet-benchmark-scanner (scan_solution.py)
 ## Estructura del marketplace
 
 ```
-Agents/
+code-craft/
 ├── .claude-plugin/
 │   └── marketplace.json          # Catálogo del marketplace
 └── plugins/

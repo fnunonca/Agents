@@ -11,7 +11,7 @@ Guía rápida para usar las herramientas de análisis de performance en proyecto
 ## Opción A — Instalar como plugin (recomendado)
 
 ```
-/plugin marketplace add github.com/<tu-usuario>/Agents
+/plugin marketplace add github.com/<tu-usuario>/code-craft
 /plugin install dotnet-benchmark-scanner@code-craft
 /plugin install dotnet-benchmark-analyzer@code-craft
 ```
@@ -23,7 +23,7 @@ Una vez instalados, podés invocar la skill y el agente directamente desde Claud
 Desde este repo (o un clon):
 
 ```
-Agents/
+code-craft/
 └── plugins/dotnet-benchmark-scanner/skills/dotnet-benchmark-scanner/
     ├── scripts/
     │   ├── scan_solution.py           # Scanner de candidatos
@@ -35,7 +35,7 @@ Agents/
 
 ### Paso 1: Escanear tu Proyecto
 
-Desde este directorio (Agents), ejecuta:
+Desde este directorio (code-craft), ejecuta:
 
 ```bash
 python3 plugins/dotnet-benchmark-scanner/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py \
