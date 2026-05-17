@@ -20,6 +20,7 @@ Instalá solo los plugins que necesites — cada agente y skill se publica como 
 | Plugin | Descripción |
 |---|---|
 | **[dotnet-code-review](plugins/dotnet-code-review/)** | Revisión integral de código .NET 8/9/10: seguridad (SQL injection, secrets, auth), performance (N+1, async), arquitectura SOLID y calidad de tests. |
+| **[dotnet-backend-senior](plugins/dotnet-backend-senior/)** | Desarrollador backend senior .NET 10 / C# 14 para APIs sobre stack interno (Clean Architecture 6 capas, Dapper + Stored Procedures, NLog/IAppLogger, Hangfire, IRestClient, Options Pattern). |
 | **[dotnet-benchmark-analyzer](plugins/dotnet-benchmark-analyzer/)** | Sub-agente de BenchmarkDotNet. Crea proyectos de benchmark, genera 2-4 variantes de optimización (Span, ArrayPool, ValueTask, SIMD) y produce reportes comparativos. |
 | **[git-history-investigator](plugins/git-history-investigator/)** | Arqueología de código: bisect de bugs, blame analysis, evolución de código, recuperación de código eliminado, análisis de impacto. |
 
@@ -56,6 +57,9 @@ Agents/
     ├── dotnet-code-review/
     │   ├── .claude-plugin/plugin.json
     │   └── agents/code-reviewer.md
+    ├── dotnet-backend-senior/
+    │   ├── .claude-plugin/plugin.json
+    │   └── agents/dotnet-backend-senior.md
     ├── dotnet-benchmark-analyzer/
     │   ├── .claude-plugin/plugin.json
     │   └── agents/benchmark-analyzer.md

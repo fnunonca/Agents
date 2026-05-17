@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-`fernando-agents` — a **Claude Code plugin marketplace** that distributes a personal collection of agents and skills for .NET 8/9/10 (C# 12/13/14) development workflows: automated code review, performance benchmarking, git history investigation, and benchmark scanning. All agent prompts and output are in Spanish.
+`fernando-agents` — a **Claude Code plugin marketplace** that distributes a personal collection of agents and skills for .NET 8/9/10 (C# 12/13/14) development workflows: automated code review, backend implementation on internal stack, performance benchmarking, git history investigation, and benchmark scanning. All agent prompts and output are in Spanish.
 
 Users consume this repo via:
 ```
@@ -21,9 +21,10 @@ Users consume this repo via:
 ## Repository Layout
 
 ```
-.claude-plugin/marketplace.json      # Marketplace catalog (4 plugins)
+.claude-plugin/marketplace.json      # Marketplace catalog (5 plugins)
 plugins/
 ├── dotnet-code-review/              # Agent plugin
+├── dotnet-backend-senior/           # Agent plugin (implementer for internal stack)
 ├── dotnet-benchmark-analyzer/       # Agent plugin (sub-agent)
 ├── git-history-investigator/        # Agent plugin
 └── dotnet-benchmark-scanner/        # Skill plugin
@@ -62,6 +63,9 @@ Main orchestrator for comprehensive .NET code reviews. Analyzes security (SQL in
 Sub-agent for BenchmarkDotNet performance testing. Creates benchmark projects, generates 2-4 optimization variants (Span-based, ArrayPool, ValueTask, struct-based, SIMD, etc.), and produces detailed comparison reports.
 
 **Outputs**: `BENCHMARK_REPORT.md` in `benchmark/Benchmark_[MethodName]_[Timestamp]/`
+
+### dotnet-backend-senior (`plugins/dotnet-backend-senior/agents/dotnet-backend-senior.md`)
+Senior .NET backend implementer for the team's internal stack: Clean Architecture (6 layers), Dapper + Stored Procedures, NLog via `IAppLogger`, Hangfire (MemoryStorage), `IRestClient`, Options Pattern, xUnit with manual stubs. Applies conventions consistently (naming, layering, error codes, logging format, masking of sensitive data) and proposes architectural improvements only when explicitly asked.
 
 ### git-history-investigator (`plugins/git-history-investigator/agents/git-investigator.md`)
 Agent for code archaeology: bug introduction finding (git bisect), blame analysis, code evolution tracking, deleted code recovery, and impact analysis.

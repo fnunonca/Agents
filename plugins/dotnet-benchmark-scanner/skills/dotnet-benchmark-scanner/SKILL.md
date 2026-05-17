@@ -49,8 +49,10 @@ Verificar que la ruta proporcionada existe y es un archivo `.sln` o `.csproj` v�
 ### Paso 2: Ejecutar Script de Escaneo
 
 ```bash
-python3 .claude/skills/dotnet-benchmark-scanner/scripts/scan_solution.py <solution_path> --version <dotnet_version> --threshold <severity_threshold>
+python3 scripts/scan_solution.py <solution_path> --version <dotnet_version> --threshold <severity_threshold>
 ```
+
+> Los scripts viven junto a este `SKILL.md` (en `scripts/`). Cuando ejecutes desde la raíz del repo, prefijá con `plugins/dotnet-benchmark-scanner/skills/dotnet-benchmark-scanner/`.
 
 El script genera un archivo JSON con los resultados del análisis.
 
@@ -165,13 +167,13 @@ Para un flujo de trabajo completo (escaneo → selección → benchmark), usar e
 ### Modo Interactivo
 
 ```bash
-python3 .claude/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py /path/to/Solution.sln
+python3 scripts/orchestrate_benchmark.py /path/to/Solution.sln
 ```
 
 ### Modo Batch (CI/CD)
 
 ```bash
-python3 .claude/skills/dotnet-benchmark-scanner/scripts/orchestrate_benchmark.py /path/to/Solution.sln \
+python3 scripts/orchestrate_benchmark.py /path/to/Solution.sln \
     --batch \
     --threshold critical
 ```
