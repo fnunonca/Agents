@@ -98,10 +98,10 @@ Asignación semántica para los nodos del diagrama:
 
 ### 4. Diagrama React Flow — convenciones obligatorias
 
-Carga la librería desde CDN, sin bundler:
+Carga la librería desde CDN, sin bundler. **Versiones pinneadas a minor** — `@12` puede resolver a un 12.x futuro con breaking changes silenciosos:
 
 ```html
-<link rel="stylesheet" href="https://esm.sh/@xyflow/react@12/dist/style.css">
+<link rel="stylesheet" href="https://esm.sh/@xyflow/react@12.3.5/dist/style.css">
 <script type="importmap">
 {
   "imports": {
@@ -109,7 +109,7 @@ Carga la librería desde CDN, sin bundler:
     "react/jsx-runtime": "https://esm.sh/react@18.3.1/jsx-runtime",
     "react-dom": "https://esm.sh/react-dom@18.3.1",
     "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
-    "@xyflow/react": "https://esm.sh/@xyflow/react@12?deps=react@18.3.1,react-dom@18.3.1"
+    "@xyflow/react": "https://esm.sh/@xyflow/react@12.3.5?deps=react@18.3.1,react-dom@18.3.1"
   }
 }
 </script>
@@ -121,7 +121,7 @@ Carga la librería desde CDN, sin bundler:
 - Cada nodo renderiza `data.title` (negrita, color por tipo) + lista `data.subs` (mono, muted).
 - Usa `useNodesState` + `useEdgesState` con `onNodesChange`/`onEdgesChange` **siempre** — sin esto los nodos no se pueden arrastrar.
 - Edges `type: 'smoothstep'` + `MarkerType.ArrowClosed`.
-- **Labels de edges**: definir un `lblStyle` / `lblBgStyle` / `lblBgPadding` reutilizable y pasarlo a TODA edge con label. Sin esto los labels son ilegibles. Ejemplo: `labelStyle: { fill: '#e3e8f0', fontSize: 11, fontFamily: 'JetBrains Mono', fontWeight: 500 }`, `labelBgStyle: { fill: '#232a37', stroke: '#2d3648', strokeWidth: 1 }`, `labelBgPadding: [6, 3]`, `labelBgBorderRadius: 4`. Mantener los labels cortos (≤30 chars) — si dos nodos están en filas paralelas (varios Repository → varias BD), sus midpoints caen en la misma franja Y y los labels largos se apilan. En ese caso: acortar labels (sacar info redundante que ya viene del nodo destino) y/o **desfasar los Y** de los nodos de las dos filas (no todos al mismo Y).
+- **Labels de edges**: declara las constantes con el **mismo nombre** que la prop de React Flow para poder usar shorthand sin errores — `const labelStyle = { fill: '#e3e8f0', fontSize: 11, fontFamily: 'JetBrains Mono', fontWeight: 500 }`, `const labelBgStyle = { fill: '#232a37', stroke: '#2d3648', strokeWidth: 1 }`, `const labelBgPadding = [6, 3]`, `const labelBgBorderRadius = 4`. Luego en cada edge: `{ …, labelStyle, labelBgStyle, labelBgPadding, labelBgBorderRadius, … }`. **No abrevies a `lbl*`**: el shorthand fallaría silenciosamente con `ReferenceError` y el diagrama quedaría vacío sin mensaje visible. Mantené los labels cortos (≤30 chars) — si dos nodos están en filas paralelas (varios Repository → varias BD), sus midpoints caen en la misma franja Y y los labels largos se apilan. En ese caso: acortar labels (sacar info redundante que ya viene del nodo destino) y/o **desfasar los Y** de los nodos de las dos filas (no todos al mismo Y).
 - Llamadas síncronas: línea sólida del color del destino.
 - Llamadas dentro de Thread/job fire-and-forget: `strokeDasharray: '6 4'` + naranja + `animated: true`.
 - Llamadas HTTP a externos: `animated: true`.
@@ -130,6 +130,26 @@ Carga la librería desde CDN, sin bundler:
 - Children: `<Background variant="dots" gap={24} size={1} color="#2d3648" />`, `<Controls showInteractive={false} />`, `<MiniMap>` con `nodeColor` por `data.kind`, `<Panel position="top-left">` con texto guía.
 - **Botón de Pantalla completa**: el contenedor del diagrama debe tener `position: relative` y un botón absoluto en la esquina superior derecha que dispare `requestFullscreen()` / `exitFullscreen()` sobre el wrapper. Incluir reglas CSS `:fullscreen` y `:-webkit-full-screen` para que React Flow ocupe el viewport y se oculte el padding del recuadro. El handler debe alternar el texto del botón ("Pantalla completa" ↔ "Salir pantalla completa") escuchando `fullscreenchange` y `webkitfullscreenchange`.
 - **Toolbar reusable** (fullscreen + export PNG): el handler vive en `window.setupRfToolbar({ wrapper, canvas, fileBaseName, fsBtn, fsLabel, exportBtn, exportLabel })`, definido **una vez** en el `<script>` del primer diagrama. Los diagramas siguientes solo llaman a la función pasando sus referencias. Cada wrapper usa la clase `.rf-wrapper` (genérica) y cada canvas la clase `.rf-canvas` (en lugar de `#reactflow-root`, que es específico del mapa de interacciones por compatibilidad).
+- **Manejo de errores visible**: envolvé `createRoot(...).render(...)` en `try/catch` y, si falla, reemplazá `#reactflow-root` con un mensaje rojo en monoespacio mostrando `err.message`. Adicionalmente, agregá un `window.addEventListener('error', …)` ANTES de los `<script type="module">` que, si el contenedor del diagrama quedó vacío, escriba ahí el mensaje del error. Sin este patrón, un `ReferenceError` o un import roto deja un recuadro vacío sin pistas y diagnosticar requiere DevTools (que el usuario típicamente no abre). Patrón de referencia:
+  ```html
+  <script>
+    window.addEventListener("error", function (e) {
+      const root = document.getElementById("reactflow-root");
+      if (root && !root.childElementCount) {
+        root.innerHTML = '<div style="padding:24px;color:#f7768e;font-family:monospace;font-size:12px;">Error: ' + (e && e.message ? e.message : "desconocido") + '</div>';
+      }
+    });
+  </script>
+  ```
+  ```js
+  try {
+    const root = createRoot(document.getElementById("reactflow-root"));
+    root.render(React.createElement(ReactFlowProvider, null, React.createElement(FlowApp)));
+  } catch (err) {
+    const target = document.getElementById("reactflow-root");
+    if (target) target.innerHTML = `<div style="padding:24px;color:#f7768e;font-family:monospace;font-size:12px;">Error al renderizar el diagrama: ${err && err.message ? err.message : err}</div>`;
+  }
+  ```
 - **Botón de Exportar PNG**: junto al de pantalla completa, agrupados en una `.rf-toolbar` absoluta arriba-derecha. Usar `html-to-image` (`https://esm.sh/html-to-image@1.11.13`) en el import map. El handler:
   - Calcula bounds **leyendo el DOM** (no `getNodesBounds(initialNodes)` — devuelve mal el ancho porque `initialNodes` no incluye width/height, los pone el CSS): itera `viewport.querySelectorAll('.react-flow__node')`, lee `style.left/top` + el `translate(...)` del `transform` + `offsetWidth/offsetHeight`, y arma `{ x, y, width, height }`. Padding ~60.
   - **Modifica directamente** `viewport.style.transform = translate(padding - bounds.x, padding - bounds.y) scale(1)` (NO usar `getViewportForBounds` + pasar el transform como style a `toPng`: el doble transform corrompe la salida).
@@ -196,6 +216,10 @@ Interacciones:
 3. Reemplaza/actualiza solo lo que cambió: nodos, edges, tablas de SPs/endpoints/servicios. No reescribas el archivo entero a ciegas si ya hay contenido válido.
 4. Valida que el HTML quede balanceado (puedes correr un `grep -c` rápido por `<div>`/`</div>`, o un parser XML sobre el bloque SVG si quedara alguno).
 5. Avisa al usuario qué encontraste en el escaneo y qué decisiones tomaste (p.ej. "detecté 3 servicios externos y 4 SPs, asumí que `Foo` es fire-and-forget porque vive en `new Thread(...)`").
+6. **Smoke test del módulo** (obligatorio antes de cerrar la tarea): releé el bloque `<script type="module">` y verificá:
+   - **(a)** cada nombre usado con **shorthand de propiedades** (`{ foo, bar }`) está declarado como `const`/`let` con ese **mismo nombre exacto**. Especialmente peligrosas: las constantes de labels (`labelStyle`, `labelBgStyle`, `labelBgPadding`, `labelBgBorderRadius`) — si las declarás como `lbl*` y usás shorthand `labelBgPadding,` se rompe con `ReferenceError` y el diagrama queda vacío silenciosamente.
+   - **(b)** los `getElementById`/`querySelector` del JS apuntan a IDs/clases que realmente escribiste en el HTML.
+   - **(c)** el render está envuelto en `try/catch` y existe el `window.addEventListener('error', …)` global (ver "Manejo de errores visible" en §4). Esto convierte cualquier fallo silencioso en un mensaje rojo visible dentro del recuadro.
 
 ### 6. Qué NO hacer
 
@@ -206,6 +230,7 @@ Interacciones:
 - No omitas `useNodesState`/`onNodesChange` — sin eso el diagrama parece roto.
 - No uses emojis salvo que el repo ya los use o el usuario los pida.
 - No incluyas atribución de React Flow (`proOptions.hideAttribution: true`).
+- **No abrevies nombres de variables que después usás con shorthand de propiedades** (p.ej. `const lblBgPadding` + `{ ..., labelBgPadding, ... }`): es un `ReferenceError` silencioso. Mantené el nombre **idéntico** a la prop.
 
 ## Archivos de referencia
 
